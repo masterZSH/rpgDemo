@@ -3,15 +3,15 @@ import hearoImg from "./assets/hero.png";
 import Player from './players/player';
 import Map    from './map/map';
 import Items    from './map/items';
-import itemsPng from './assets/items.png';
+import mapItemsPng from './assets/map-items.png';
 import mapJson from './assets/map.json';
 import itemJson from './assets/items.json';
 
 const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
-  width: 3200,
-  height: 3200,
+  width: 960,
+  height: 640,
   pixelArt: true,
   physics: {
       default: 'impact',
@@ -32,15 +32,14 @@ var keyboardKeys;
 const game = new Phaser.Game(config);
 
 function preload() {
-  Map.loadMap(this);
   this.load.spritesheet('sheet-hero', hearoImg, {
     frameWidth: 32,
     frameHeight: 32,
     endFrame: 12
   });
 
-  this.load.tilemapTiledJSON('map-items', mapJson);
-  this.load.image('items', itemsPng);
+  this.load.tilemapTiledJSON('map', mapJson);
+  this.load.image('map-items', mapItemsPng);
 
   
 }
@@ -50,22 +49,23 @@ function create() {
   // Map.addMap(this);
   // Items.loadItems(this);
 
-  // 玩家 初始化形态
-  var sprite = this.add.sprite(32, 32, 'sheet-hero', 3);
-  player = new Player(sprite,config);
-  player.loadAllWalkAnim(this);
+  
 
   
-  // Items.addItem(this);
-
-  var map = this.make.tilemap({ key: 'map-items' });
-  var tileset = map.addTilesetImage('items');
+  // 初始化地图
+  var map = this.make.tilemap({ key: 'map' });
+  var tileset = map.addTilesetImage('map-items');
 
   var layer = map.createStaticLayer(0, tileset, 0, 0);
   layer.setCollisionByProperty({ collides: true });
   this.impact.world.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
 
 
+
+  // 初始化玩家
+  var sprite = this.add.sprite(32, 32, 'sheet-hero', 3);
+  player = new Player(sprite,config);
+  player.loadAllWalkAnim(this);
 }
 
 
