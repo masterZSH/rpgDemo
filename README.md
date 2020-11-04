@@ -1,20 +1,29 @@
-## rpg demo
+## rpg demo 
 
+## usage 
 
+```
+npm install 
 
-## 地图
+npm run start
+```
 
-使用tield制作
+## Map
 
-## 游戏引擎
+tield
+
+## Game Framework
 
 pharse3
 
+## todo 
 
-## todo
-
-1. 定义类型(实时|回合)
-
-2. 场景地图
+1. design more map with tield
 
 ...
+
+## examples
+
+<image src="./imgs/demo.gif">
+
+
