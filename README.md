@@ -14,7 +14,7 @@ tield
 
 ## Game Framework
 
-pharse3
+phaser3
 
 ## todo 
 
