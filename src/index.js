@@ -1,5 +1,7 @@
 import Phaser from "phaser";
-import hearoImg from "./assets/hero.png";
+import heroImg from "./assets/hero.png";
+import npcImg from "./assets/npc.png";
+
 import Player from './players/player';
 import Map    from './map/map';
 import Items    from './map/items';
@@ -9,13 +11,15 @@ import itemJson from './assets/items.json';
 
 const config = {
   type: Phaser.AUTO,
-  parent: "phaser-example",
+  parent: "rpg",
   width: 960,
   height: 640,
   pixelArt: true,
   physics: {
-      default: 'impact',
-      impact: { gravity: 200 }
+      default: 'arcade',
+      arcade: {
+        gravity: { y: 200 }
+      }
   },
   scene: {
     preload: preload,
@@ -32,9 +36,15 @@ var keyboardKeys;
 const game = new Phaser.Game(config);
 
 function preload() {
-  this.load.spritesheet('sheet-hero', hearoImg, {
+  this.load.spritesheet('sheet-hero', heroImg, {
     frameWidth: 32,
     frameHeight: 32,
+    endFrame: 12
+  });
+
+  this.load.spritesheet('sheet-npc', npcImg, {
+    frameWidth: 48,
+    frameHeight: 64,
     endFrame: 12
   });
 
@@ -63,9 +73,13 @@ function create() {
 
 
   // 初始化玩家
-  var sprite = this.add.sprite(32, 32, 'sheet-hero', 3);
-  player = new Player(sprite,config);
-  player.loadAllWalkAnim(this);
+  // var sprite = this.add.sprite(32, 32, 'sheet-hero', 3);
+  // player = new Player(sprite,config);
+  // player.loadAllWalkAnim(this);
+
+  var nsprite = this.add.sprite(32, 32, 'sheet-npc', 1);
+
+  game.physics.world
 }
 
 
