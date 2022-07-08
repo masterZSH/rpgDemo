@@ -1,12 +1,13 @@
 import Phaser from "phaser";
 import heroImg from "./assets/hero.png";
-import npcImg from "./assets/npc1.png";
+import npcImg from "./assets/npc2.png";
+import gemPng from "./assets/gem.png";
 
 import Player from './players/player';
 import Npc from './players/npc';
 
-import Map    from './map/map';
-import Items    from './map/items';
+import Map from './map/map';
+import Items from './map/items';
 import mapItemsPng from './assets/map-items.png';
 import logoPng from './assets/logo.png';
 
@@ -22,27 +23,28 @@ const config = {
   height: 640,
   pixelArt: true,
   physics: {
-      default: 'arcade',
-      arcade: {
-        gravity: { y: 200 }
-      }
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 200 }
+    }
   },
   scene: {
     preload: preload,
     create: create,
     update: update,
-    logoScene:logoScene
+    logoScene: logoScene
   }
 };
 
 
-var player,npc;
+var player, npc;
 var keyboardKeys;
 
 
 const game = new Phaser.Game(config);
 
 function preload() {
+
   this.load.spritesheet('sheet-hero', heroImg, {
     frameWidth: 32,
     frameHeight: 32,
@@ -50,15 +52,17 @@ function preload() {
   });
 
   this.load.spritesheet('sheet-npc', npcImg, {
-    frameWidth: 144,
-    frameHeight: 162,
-    endFrame: 12
+    frameWidth: 32,
+    frameHeight: 48,
+    endFrame: 16
   });
 
   this.load.tilemapTiledJSON('map', mapJson);
   this.load.image('map-items', mapItemsPng);
 
   this.load.image('logo', logoPng);
+
+  this.load.image('gem', gemPng);
 
 }
 
@@ -67,16 +71,17 @@ function create() {
   // Map.addMap(this);
   // Items.loadItems(this);
 
-  
-
-  
   // 初始化地图
   var map = this.make.tilemap({ key: 'map' });
   var tileset = map.addTilesetImage('map-items');
 
   var layer = map.createStaticLayer(0, tileset, 0, 0);
   layer.setCollisionByProperty({ collides: true });
-  // this.impact.world.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
+  // // this.impact.world.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
+
+  
+
+  this.physics.systems.start(Phaser.Physics.ARCADE)
 
 
 
@@ -85,10 +90,31 @@ function create() {
   player = new Player(sprite,config);
   player.loadAllWalkAnim(this);
 
-  var nsprite = this.add.sprite(64, 64, 'sheet-npc', 1);
-  npc = new Npc(nsprite,config);
-  
+  var nsprite = this.add.sprite(128, 32, 'sheet-npc', 2);
+  // npc = new Npc(nsprite,config);
+  // npc.loadWalkAnim(this,"down",true);
+  // var image = this.add.image(50, 50, 'logo');
 
+  // this.add.image(0, 0, 'gem', null, game.stage);
+  // this.add.image(100, 0, 'gem', null, game.stage);
+  // this.add.image(200, 0, 'gem', null, game.stage);
+  // this.add.image(300, 0, 'gem', null, game.stage);
+
+
+  var particles = this.add.particles('red');
+
+  var emitter = particles.createEmitter({
+      speed: 50,
+      scale: { start: 1, end: 0 },
+      blendMode: 'ADD'
+  });
+
+  var npcentity = this.add.sprite(128, 32, 'sheet-npc', 2);
+
+  // npcentity.setVelocity(100, 200);
+  // npcentity.setBounce(1, 1);
+  // npcentity.setCollideWorldBounds(true);
+  emitter.startFollow(npcentity);
 
 }
 
@@ -102,13 +128,13 @@ function update() {
 
   if (keyboardKeys.down.isDown) {
     player.down();
-     player.walk('down');
+    player.walk('down');
   }
 
   if (keyboardKeys.left.isDown) {
     player.left();
-     player.walk('left');
-  } 
+    player.walk('left');
+  }
 
   if (keyboardKeys.right.isDown) {
     player.right();
